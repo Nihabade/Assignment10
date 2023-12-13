@@ -1,0 +1,27 @@
+name: Create VM on Dev Push
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  create-vm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Google Cloud CLI
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@main
+        with:
+          service_account_key: ${{ secrets.GCLOUD_AUTH }}
+          project_id: ${{ secrets.GCLOUD_PROJECT }}
+          export_default_credentials: true
+
+      - name: Run VM Creation Script
+        run: |
+          chmod +x assignment10/create_vm.sh
+          ./assignment10/create_vm.sh
+
